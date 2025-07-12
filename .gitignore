@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pkl
+
+# MacOS system files
+.DS_Store
+__MACOSX/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Virtual environments
+venv/
+env/
+
+# MLflow runs
+mlruns/
+reports/mlruns/
+
+# Large data files
+*.csv
+*.txt
+
+# Docker
+*.log
+
+# IDE files
+*.save
+
+# Bandit, Black, Flake8 reports
+reports/*.txt
+
+# Misc
+*.swp
+*.bak
