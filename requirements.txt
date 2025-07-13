@@ -9,4 +9,5 @@ pytest
 bandit
 mlflow
 fastapi
-uvicorn
+uvicorn2
+urllib3
