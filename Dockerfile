@@ -1,13 +1,21 @@
+# Use an official Python runtime as a parent image
 FROM python:3.8-slim
 
+# Set the working directory in the container
 WORKDIR /app
 
-COPY requirements.txt .
+# Copy the requirements file first to leverage Docker cache
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN pip install --no-cache-dir --upgrade pip && pip install --no-cache-dir -r requirements.txt
+# Copy the rest of the application code
+COPY . /app
 
-COPY . .
+# Run main.py to generate model.pkl
+RUN python3 main.py
 
-EXPOSE 8000
+# Expose ports
+EXPOSE 5000 8000
 
-CMD ["python", "-m", "uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+# Use JSON format for CMD to prevent unintended behavior related to OS signals
+CMD ["sh", "-c", "mlflow ui --host 0.0.0.0 --port 5000 & uvicorn app:app --host 0.0.0.0 --port 8000"]

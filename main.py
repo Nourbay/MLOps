@@ -9,6 +9,17 @@ from sklearn.model_selection import train_test_split
 from functionalities import (add_features, clean_data, prepare_model_data,
                              scale_data)
 
+import numpy as np
+from logging_config import setup_logging, get_logger
+import logging
+
+# Enable auto-logging
+mlflow.autolog()  # <-- Magic happens here!
+
+# Setup logging
+logger = setup_logging('mlflow.log', level=logging.INFO)
+
+
 
 def load_data(filepath):
     print("1. 📥 Chargement des données...")
