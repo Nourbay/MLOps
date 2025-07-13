@@ -1,4 +1,4 @@
-version: '3.7'
+
 
 services:
 
@@ -16,6 +16,7 @@ services:
   # due to the non-default profile it belongs to. To run it, either provide the
   # '--profile=setup' CLI flag to Compose commands, or "up" the service by name
   # such as 'docker compose up setup'.
+
   setup:
     profiles:
       - setup
@@ -48,7 +49,7 @@ services:
       args:
         ELASTIC_VERSION: ${ELASTIC_VERSION}
     volumes:
-      #- ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,Z
+      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,Z
       - elasticsearch:/usr/share/elasticsearch/data:Z
     ports:
       - 9200:9200
@@ -65,7 +66,6 @@ services:
       discovery.type: single-node
     networks:
       - elk
-    restart: unless-stopped
 
   logstash:
     build:
@@ -73,8 +73,9 @@ services:
       args:
         ELASTIC_VERSION: ${ELASTIC_VERSION}
     volumes:
-      #- ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro,Z
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro,Z
       - ./logstash/pipeline:/usr/share/logstash/pipeline:ro,Z
+      - ./mlflow.log:/app/mlflow.log:ro,Z
     ports:
       - 5044:5044
       - 50000:50000/tcp
@@ -87,15 +88,14 @@ services:
       - elk
     depends_on:
       - elasticsearch
-    restart: unless-stopped
 
   kibana:
     build:
       context: kibana/
       args:
         ELASTIC_VERSION: ${ELASTIC_VERSION}
-    #volumes:
-    #  - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,Z
+    volumes:
+      - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,Z
     ports:
       - 5601:5601
     environment:
@@ -104,8 +104,27 @@ services:
       - elk
     depends_on:
       - elasticsearch
-    restart: unless-stopped
 
+  # MLflow Application
+  nour-ml:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./mlflow.log:/app/mlflow.log:rw,Z
+    ports:
+      - 5000:5000  # MLflow UI
+      - 8000:8000  # FastAPI
+    environment:
+      - ELASTIC_USERNAME=${ELASTIC_USERNAME:-elastic}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-changeme}
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+      - logstash
+      - kibana
+      
 networks:
   elk:
     driver: bridge
