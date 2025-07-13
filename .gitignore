@@ -21,8 +21,6 @@ mlruns/
 reports/mlruns/
 
 # Large data files
-*.csv
-*.txt
 
 # Docker
 *.log
