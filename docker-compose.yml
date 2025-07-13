@@ -104,26 +104,6 @@ services:
       - elk
     depends_on:
       - elasticsearch
-
-  # MLflow Application
-  nour-ml:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    volumes:
-      - ./mlflow.log:/app/mlflow.log:rw,Z
-    ports:
-      - 5000:5000  # MLflow UI
-      - 8000:8000  # FastAPI
-    environment:
-      - ELASTIC_USERNAME=${ELASTIC_USERNAME:-elastic}
-      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-changeme}
-    networks:
-      - elk
-    depends_on:
-      - elasticsearch
-      - logstash
-      - kibana
       
 networks:
   elk:
