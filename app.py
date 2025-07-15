@@ -25,6 +25,7 @@ scaler = model_bundle["scaler"]
 
 
 
+
 # === Initialiser l’application FastAPI
 app = FastAPI(
     title="API Prédiction GHG",
@@ -51,14 +52,6 @@ def predict(data: PredictionInput):
         prediction = model.predict(input_scaled)
         pred_value = float(prediction[0])
 
-        # Log dans Elasticsearch
-        if es_client.ping():
-            doc = {
-                "timestamp": datetime.datetime.utcnow().isoformat(),
-                "input": data.dict(),
-                "prediction": pred_value
-            }
-            es_client.index(index="mlflow-metrics", document=doc)
 
         return {"prediction": pred_value}
     except Exception as e:
