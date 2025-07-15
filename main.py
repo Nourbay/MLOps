@@ -16,11 +16,7 @@ import os
 import json
 from datetime import datetime
 
-# Enable auto-logging
-mlflow.autolog()  # <-- Magic happens here!
 
-# Setup logging
-logger = setup_logging('logs/mlflow.log', level=logging.INFO)
 
 def log_mlflow_event(event_type, details):
     """Log events in a format suitable for Logstash/Elasticsearch"""
@@ -171,6 +167,12 @@ def save_model(model, scaler, path="gb_model.pkl"):
         logger.error(f"Erreur lors de la sauvegarde: {str(e)}")
         log_mlflow_event("model_saving_error", {"error": str(e), "path": path})
         raise
+
+# Enable auto-logging
+mlflow.autolog()  # <-- Magic happens here!
+
+# Setup logging
+logger = setup_logging('mlflow.log', level=logging.INFO)
 
 def main():
     # Chemin de données

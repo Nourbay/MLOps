@@ -3,7 +3,7 @@ import logging.handlers
 import os
 from datetime import datetime
 
-def setup_logging(log_file='logs/mlflow.log', level=logging.INFO):
+def setup_logging(log_file='mlflow.log', level=logging.INFO):
     """
     Setup logging configuration for the application.
     This creates a log file that can be consumed by Logstash.
