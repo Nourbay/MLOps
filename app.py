@@ -10,7 +10,7 @@ from functionalities import prepare_data, train_model, save_model
 import datetime
 
 # === Chemin du modèle
-MODEL_PATH = "gb_model.pkl"
+MODEL_PATH = "models/gb_model.pkl"
 
 # === Charger le modèle et le scaler au démarrage
 if not os.path.exists(MODEL_PATH):

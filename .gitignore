@@ -23,7 +23,7 @@ reports/mlruns/
 # Large data files
 
 # Docker
-*.log
+
 
 # IDE files
 *.save
