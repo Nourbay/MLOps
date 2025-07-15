@@ -6,7 +6,7 @@ import os
 
 from functionalities import prepare_data, train_model, save_model
 
-from elasticsearch import Elasticsearch
+
 import datetime
 
 # === Chemin du modèle
@@ -23,22 +23,6 @@ if not isinstance(model_bundle, dict) or "model" not in model_bundle or "scaler"
 model = model_bundle["model"]
 scaler = model_bundle["scaler"]
 
-# === Connexion à Elasticsearch
-def connect_elasticsearch():
-    # version corrigée que je t'ai donnée
-    es = Elasticsearch(
-        "http://localhost:9200",
-        request_timeout=30,
-        verify_certs=False,
-        ssl_show_warn=False
-    )
-    if es.ping():
-        print("✅ Elasticsearch connecté")
-    else:
-        print("❌ Impossible de se connecter à Elasticsearch (ping=False)")
-    return es
-
-es_client = connect_elasticsearch()
 
 
 # === Initialiser l’application FastAPI
